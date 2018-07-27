@@ -28,8 +28,9 @@ class ReturnedObject
     {
         $columns = $this->normalizeColumns();
         $columns['listing_id'] = $listing->id;
-        $columns['url'] = 'http://rafgc.net/RAFSGReports/media/'. $columns['file_name'];
-
+        if ($columns['media_type'] === 'Photo') {
+            $columns['url'] = 'http://rafgc.net/RAFSGReports/media/'. $columns['file_name'];
+        }
         return MediaObject::create($columns);
     }
 
