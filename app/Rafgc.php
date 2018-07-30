@@ -12,10 +12,10 @@ class Rafgc
     const URL = 'http://rets.rafgc.net/Login.aspx';
     const CLASSES = ['CIB', 'DOC', 'LND', 'RES'];
     const QUERY_OPTIONS =  [
-        'QueryType' => 'DMQL2',
-        'Count' => 1, // count and records
-        'Format' => 'COMPACT-DECODED',
-        'Limit' => 99999999,
+        'QueryType'     => 'DMQL2',
+        'Count'         => 1, // count and records
+        'Format'        => 'COMPACT-DECODED',
+        'Limit'         => 99999999,
         'StandardNames' => 0, // give system names
     ];
 
