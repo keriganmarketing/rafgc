@@ -19,7 +19,7 @@ class ListingsSearchController extends Controller
         $maxPrice     = $request->maxPrice ?? '';
         $beds         = $request->beds ?? '';
         $baths        = $request->baths ?? '';
-        $sqft         = $request->sq_ft ?? '';
+        $sqft         = $request->sqft ?? '';
         $acreage      = $request->acreage ?? '';
         $waterfront   = $request->waterfront ?? '';
         $waterview    = $request->waterview ?? '';
