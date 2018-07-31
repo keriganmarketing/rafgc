@@ -11,7 +11,7 @@ class ListingsSearchController extends Controller
     public function index(Request $request)
     {
         $omni         = $request->omni ?? '';
-        $status       = $request->status && is_array($request->status) ?? 'Active';
+        $status       = $request->status ?? '';
         $area         = $request->area ?? '';
         $propertyType = isset($request->propertyType) && $request->propertyType !== 'Rental' ? $request->propertyType : '';
         $forclosure   = $request->forclosure ?? '';
@@ -29,10 +29,9 @@ class ListingsSearchController extends Controller
         if ($propertyType != '') {
             $propertyType = explode('|', $propertyType);
         }
-        if ($status != '') {
+        if ($status) {
             $status = explode('|', $status);
         }
-
         $listings = Listing::when($omni, function ($query) use ($omni) {
             $query->where(function ($query) use ($omni) {
                 $query->whereRaw("city LIKE '%{$omni}%'")
@@ -48,11 +47,11 @@ class ListingsSearchController extends Controller
             ->when($status, function ($query) use ($status) {
                 return $query->whereIn('status', $status);
             })
-            ->when($minPrice, function ($query) use ($minPrice) {
-                return $query->where('list_price', '>=', $minPrice);
-            })
             ->when($area, function ($query) use ($area) {
                 return $query->where('area', $area)->orWhere('sub_area', $area);
+            })
+            ->when($minPrice, function ($query) use ($minPrice) {
+                return $query->where('list_price', '>=', $minPrice);
             })
             ->when($maxPrice, function ($query) use ($maxPrice) {
                 return $query->where('list_price', '<=', $maxPrice);
