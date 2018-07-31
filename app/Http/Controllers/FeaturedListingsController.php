@@ -11,11 +11,6 @@ class FeaturedListingsController extends Controller
 {
     public function index(Request $request)
     {
-        $mlsNumbers = explode('|', $request->mlsNumbers);
-
-        return fractal(
-            Listing::whereIn('mls_acct', $mlsNumbers)->get(),
-            new ListingTransformer
-        );
+        return Listing::featuredList($request);
     }
 }
