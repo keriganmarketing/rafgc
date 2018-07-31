@@ -14,7 +14,7 @@ class FeaturedListingsController extends Controller
         $mlsNumbers = explode('|', $request->mlsNumbers);
 
         return fractal(
-            Listing::whereIn('mls_acct', $mlsNumbers)->get(),
+            Listing::whereIn('mls_acct', $mlsNumbers)->where('status', 'Active')->get(),
             new ListingTransformer
         );
     }
