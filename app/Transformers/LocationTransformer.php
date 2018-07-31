@@ -6,7 +6,7 @@ use App\Location;
 use League\Fractal\TransformerAbstract;
 use Illuminate\Database\Eloquent\Collection;
 
-class MediaObjectTransformer extends TransformerAbstract
+class LocationTransformer extends TransformerAbstract
 {
     /**
      * A Fractal transformer.

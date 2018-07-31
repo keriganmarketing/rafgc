@@ -4,7 +4,6 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use App\MediaObject;
-use Illuminate\Database\Eloquent\Collection;
 
 class MediaObjectTransformer extends TransformerAbstract
 {
