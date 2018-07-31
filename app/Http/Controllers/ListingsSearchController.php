@@ -17,8 +17,8 @@ class ListingsSearchController extends Controller
         $forclosure   = $request->forclosure ?? '';
         $minPrice     = $request->minPrice ?? '';
         $maxPrice     = $request->maxPrice ?? '';
-        $beds         = $request->bedrooms ?? '';
-        $baths        = $request->bathrooms ?? '';
+        $beds         = $request->beds ?? '';
+        $baths        = $request->baths ?? '';
         $sqft         = $request->sq_ft ?? '';
         $acreage      = $request->acreage ?? '';
         $waterfront   = $request->waterfront ?? '';
