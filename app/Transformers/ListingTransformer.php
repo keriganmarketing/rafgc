@@ -63,7 +63,7 @@ class ListingTransformer extends TransformerAbstract
             'num_units'           => $listing->num_units,
             'occupancy'           => $listing->occupancy_yn,
             'parcel_id'           => $listing->parcel_id,
-            'parking_spaces'      => $listing->parking_spaces,
+            'parking_spaces'      => (int) $listing->parking_spaces,
             'parking_type'        => $listing->parking_type,
             'photo_count'         => $listing->photo_count,
             'photo_date_modified' => $listing->photo_date_modified,
@@ -83,20 +83,22 @@ class ListingTransformer extends TransformerAbstract
             'status'              => $listing->status,
             'stories'             => $listing->stories,
             'street_name'         => $listing->street_name,
-            'street_num'          => $listing->street_num,
+            'street_num'          => (int) $listing->street_num,
             'subdivision'         => $listing->subdivision,
             'sub_area'            => $listing->sub_area,
             'total_hc_sqft'       => $listing->tot_heat_sqft,
-            'unit_num'            => $listing->unit_num,
+            'unit_num'            => (int) $listing->unit_num,
             'waterfront_feet'     => $listing->wf_feet,
-            'year_built'          => $listing->year_built,
+            'year_built'          => (int) $listing->year_built,
             'zip'                 => $listing->zip,
         ];
     }
 
     public function includeMediaObjects(Listing $listing)
     {
-        $mediaObjects = $listing->mediaObjects ?? [];
+        $mediaObjects = $listing->mediaObjects->sortBy(function ($mediaObject){
+            return $mediaObject->media_order;
+        }) ?? [];
 
         return $this->collection($mediaObjects, new MediaObjectTransformer);
     }

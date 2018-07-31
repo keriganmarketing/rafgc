@@ -31,6 +31,7 @@ class Listing extends Model
 
     public static function forAgent($agentCode)
     {
+        dd($agentCode);
         return fractal(
             Listing::where('la_code', $agentCode)
                 ->orWhere('co_la_code', $agentCode)
