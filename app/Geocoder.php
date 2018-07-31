@@ -25,15 +25,21 @@ class Geocoder
         try {
             $response = $this->remoteConnection->get($this->url);
         } catch (ClientException $e) {
-            $this->remoteConnection = new Client([
-                'base_uri' => 'http://dev.virtualearth.net/REST/v1/Locations?'
-                ]);
-            $this->url = $this->unstructuredUrl();
-
-            $response = $this->remoteConnection->get($this->url);
+            // Fallback to try a different query to see if we can find the address
+            $response = $this->performFallbackQuery();
         }
 
         return new MapPosition(json_decode($response->getBody()));
+    }
+
+    protected function performFallbackQuery()
+    {
+        $this->remoteConnection = new Client([
+            'base_uri' => 'http://dev.virtualearth.net/REST/v1/Locations?'
+            ]);
+        $this->url = $this->unstructuredUrl();
+
+        return $this->remoteConnection->get($this->url);
     }
 
     private function structuredUrl()
