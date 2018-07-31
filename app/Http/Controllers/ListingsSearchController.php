@@ -63,7 +63,7 @@ class ListingsSearchController extends Controller
                 return $query->where('baths', '>=', $baths);
             })
             ->when($sqft, function ($query) use ($sqft) {
-                return $query->where('total_hc_sqft', '>=', $sqft);
+                return $query->where('sqft_total', '>=', $sqft);
             })
             ->when($acreage, function ($query) use ($acreage) {
                 return $query->where('acreage', '>=', $acreage);
