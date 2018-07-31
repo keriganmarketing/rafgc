@@ -12,6 +12,7 @@ class ListingsSearchController extends Controller
     {
         $omni         = $request->omni ?? '';
         $status       = $request->status && is_array($request->status) ?? 'Active';
+        $area         = $request->area ?? '';
         $propertyType = isset($request->propertyType) && $request->propertyType !== 'Rental' ? $request->propertyType : '';
         $forclosure   = $request->forclosure ?? '';
         $minPrice     = $request->minPrice ?? '';
@@ -36,8 +37,6 @@ class ListingsSearchController extends Controller
             $query->where(function ($query) use ($omni) {
                 $query->whereRaw("city LIKE '%{$omni}%'")
                     ->orWhereRaw("zip LIKE '%{$omni}%'")
-                    ->orWhereRaw("sub_area LIKE '%{$omni}%'")
-                    ->orWhereRaw("area LIKE '%{$omni}%'")
                     ->orWhereRaw("subdivision LIKE '%{$omni}%'")
                     ->orWhereRaw("full_address LIKE '%{$omni}%'")
                     ->orWhereRaw("mls_acct LIKE '%{$omni}%'");
@@ -51,6 +50,9 @@ class ListingsSearchController extends Controller
             })
             ->when($minPrice, function ($query) use ($minPrice) {
                 return $query->where('list_price', '>=', $minPrice);
+            })
+            ->when($area, function ($query) use ($area) {
+                return $query->where('area', $area)->orWhere('sub_area', $area);
             })
             ->when($maxPrice, function ($query) use ($maxPrice) {
                 return $query->where('list_price', '<=', $maxPrice);
