@@ -18,4 +18,5 @@ Route::get('/', function () {
 Route::prefix('/api/v1')->group(function () {
     Route::get('search', 'ListingsSearchController@index')->name('listings.search');
     Route::get('listings', 'FeaturedListingsController@index')->name('listings.featured');
+    Route::get('agent-listings/{agent}', 'AgentListingsController@index')->name('agent.listings');
 });

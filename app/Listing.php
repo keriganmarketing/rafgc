@@ -21,13 +21,22 @@ class Listing extends Model
         return $this->hasOne(Location::class);
     }
 
-    public static function featuredList(Request $request)
+    public static function featuredList($mlsNumbers)
     {
-        $mlsNumbers = explode('|', $request->mlsNumbers);
-
         return fractal(
             Listing::whereIn('mls_acct', $mlsNumbers)->get(),
             new ListingTransformer
         )->toJson();
+    }
+
+    public static function forAgent($agentCode)
+    {
+        return fractal(
+            Listing::where('la_code', $agentCode)
+                ->orWhere('co_la_code', $agentCode)
+                ->orWhere('sa_code', $agentCode)
+                ->get(),
+            new ListingTransformer
+        );
     }
 }
