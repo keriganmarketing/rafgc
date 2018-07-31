@@ -10,7 +10,7 @@ class Listing extends Model
     use Searchable;
 
     protected $guarded = [];
-    protected $with    = ['mediaObjects'];
+    protected $with    = ['mediaObjects', 'location'];
 
     public function mediaObjects()
     {

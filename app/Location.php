@@ -18,20 +18,18 @@ class Location extends Model
 
     public static function forListing(Listing $listing)
     {
-        if (! $listing->has('location')->first()) {
-            self::getNewCoords($listing);
-        }
+        self::getNewCoords($listing);
     }
 
     protected static function getNewCoords($listing)
     {
         $geoCoder = new Geocoder($listing);
-        $coords = $geoCoder->getCoordinates($listing);
+        $coords   = $geoCoder->getCoordinates($listing);
 
         Location::create([
             'listing_id' => $listing->id,
-            'lat' => $coords->lat,
-            'long' => $coords->long,
+            'lat'        => $coords->lat,
+            'long'       => $coords->long,
             'confidence' => $coords->confidence
         ]);
     }

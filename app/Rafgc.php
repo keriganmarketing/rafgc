@@ -56,7 +56,20 @@ class Rafgc
            $this->fetchListings();
        }
 
+       $this->getGeocodes();
+
        return $this;
+    }
+
+    public static function getGeocodes()
+    {
+        DB::table('listings')->orderBy('id', 'asc')->chunk(100, function ($listings) {
+            foreach ($listings as $listing) {
+                echo $listing->id . PHP_EOL;
+                $listingObject = Listing::find($listing->id);
+                Location::forListing($listingObject);
+            }
+        });
     }
 
     public function buildMediaObjects()

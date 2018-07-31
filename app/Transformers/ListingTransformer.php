@@ -8,7 +8,8 @@ use App\Listing;
 class ListingTransformer extends TransformerAbstract
 {
     protected $defaultIncludes = [
-        'media_objects'
+        'media_objects',
+        'location'
     ];
     /**
      * A Fractal transformer.
@@ -97,6 +98,13 @@ class ListingTransformer extends TransformerAbstract
     {
         $mediaObjects = $listing->mediaObjects;
 
-        return $this->collection($mediaObjects, new MediaObjectTransformer);
+        return $this->item($mediaObjects, new MediaObjectTransformer);
+    }
+
+    public function includeLocation(Listing $listing)
+    {
+        $location = $listing->location;
+
+        return $this->item($location, new LocationTransormer);
     }
 }
