@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('/api/v1')->group(function () {
+    Route::get('search', 'ListingsSearchController@index')->name('listings.search');
+});
