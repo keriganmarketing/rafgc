@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class OmniBarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return OmniTerm::select('value')->distinct()->get();
+        $search = $request->search;
+
+        return OmniTerm::where('value', 'like', "'{$search}%'")->distinct()->get();
     }
 }
