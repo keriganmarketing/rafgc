@@ -22,7 +22,12 @@ class RecentlySoldController extends Controller
                         return $query->where('prop_type', $propertyType);
                     })
                     ->when($area, function ($query) use ($area) {
-                        return $query->where('area', $area)->orWhere('sub_area', $area)->orWhere('city', $area);
+                        return $query->where(function ($q) use ($area){
+                            return $q->where('area', $area)
+                                     ->orWhere('sub_area', $area)
+                                     ->orWhere('city', $area)
+                                     ->orWhere('subdivision', $area);
+                        });
                     })
                     ->orderBy($sortBy, $orderBy)
                     ->paginate(36);

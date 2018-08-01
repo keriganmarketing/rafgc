@@ -48,4 +48,11 @@ class Listing extends Model
         $daysAgo  = $now->copy()->subDays($days);
         return $query->where('sold_date', '>=', $daysAgo);
     }
+
+    public function scopeBy($query, $officeCode)
+    {
+        return $query->where('lo_code', $officeCode)
+                     ->orWhere('co_lo_code', $officeCode)
+                     ->orWhere('so_code', $officeCode);
+    }
 }
