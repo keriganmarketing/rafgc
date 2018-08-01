@@ -55,4 +55,21 @@ class Listing extends Model
                      ->orWhere('co_lo_code', $officeCode)
                      ->orWhere('so_code', $officeCode);
     }
+
+    public function scopeWaterFront($query)
+    {
+        return $query->where('ftr_waterfront', '!=', null);
+    }
+
+    public function scopeForclosures($query)
+    {
+        return $query->where('ftr_ownership', 'like', '%Bankruptcy%')
+                     ->orWhere('ftr_ownership', 'like','%Foreclosure%')
+                     ->orWhere('ftr_ownership', 'like','%REO%');
+    }
+
+    public function scopeContingentOrPending($query)
+    {
+        return $query->where('status', 'Contingent')->orWhere('status', 'Pending');
+    }
 }

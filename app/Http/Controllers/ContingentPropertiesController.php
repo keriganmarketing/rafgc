@@ -7,12 +7,12 @@ use App\ScopedSearch;
 use Illuminate\Http\Request;
 use App\Transformers\ListingTransformer;
 
-class OurPropertiesController extends Controller
+class ContingentPropertiesController extends Controller
 {
-    public function index(Request $request, $officeCode)
+    public function index(Request $request)
     {
         $search = new ScopedSearch($request);
-        $listings = $search->setScope('by', [$officeCode])->get();
+        $listings = $search->setScope('contingentOrPending')->get();
 
         return $listings;
     }
