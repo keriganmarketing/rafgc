@@ -20,4 +20,5 @@ Route::prefix('/api/v1')->group(function () {
     Route::get('listings', 'FeaturedListingsController@index')->name('listings.featured');
     Route::get('agent-listings/{agent}', 'AgentListingsController@index')->name('agent.listings');
     Route::get('omnibar', 'OmniBarController@index')->name('omnibar');
+    Route::get('our-properties/{officeCode}', 'OurPropertiesController@index')->name('our-properties');
 });
