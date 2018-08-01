@@ -11,14 +11,15 @@ class RecentlySoldController extends Controller
 {
     public function index(Request $request)
     {
+        $sort = isset($request->sort) && $request->sort !== '' ? explode('|', $request->sort) : [];
         $propertyType = $request->propertyType ?? null;
         $area = $request->area ?? null;
-        $sortBy = (isset($request->sort) && $request->sort != null) ? explode('|', $request->sort)[0] : 'date_modified';
-        $orderBy = (isset($request->sort) && $request->sort != null) ? explode('|', $request->sort)[1] : 'desc';
+        $sortBy = (isset($sort[0]) && $sort[0] != null) ? $sort[0] : 'date_modified';
+        $orderBy = (isset($sort[1]) && $sort[1] != null) ? $sort[1] : 'desc';
 
         $listings = Listing::recentlySold($request->days)
                     ->when($propertyType, function ($query) use ($propertyType) {
-                        return $query->whereIn('prop_type', $propertyType);
+                        return $query->where('prop_type', $propertyType);
                     })
                     ->when($area, function ($query) use ($area) {
                         return $query->where('area', $area)->orWhere('sub_area', $area)->orWhere('city', $area);
