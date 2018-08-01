@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Transformers\ListingTransformer;
@@ -38,5 +39,13 @@ class Listing extends Model
                 ->get(),
             new ListingTransformer
         );
+    }
+
+    public function scopeRecentlySold($query, $days)
+    {
+        $days     = $days ?? 90;
+        $now      = Carbon::now();
+        $daysAgo  = $now->copy()->subDays($days);
+        return $query->where('sold_date', '>=', $daysAgo);
     }
 }

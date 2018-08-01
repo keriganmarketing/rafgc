@@ -11,7 +11,9 @@ class OurPropertiesController extends Controller
     public function index(Request $request, $officeCode)
     {
         return fractal(
-            Listing::where('lo_code', $officeCode)->orWhere('co_lo_code', $officeCode)->get(),
+            Listing::where('lo_code', $officeCode)
+                ->orWhere('co_lo_code', $officeCode)
+                ->get(),
             new ListingTransformer
         );
     }
