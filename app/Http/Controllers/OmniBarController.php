@@ -9,6 +9,6 @@ class OmniBarController extends Controller
 {
     public function index()
     {
-        return OmniTerm::all();
+        return OmniTerm::select('value')->distinct()->get();
     }
 }
