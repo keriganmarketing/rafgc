@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OmniTerm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OmniBarController extends Controller
 {
@@ -11,6 +12,6 @@ class OmniBarController extends Controller
     {
         $search = $request->search;
 
-        return OmniTerm::where('value', 'like', "{$search}%")->groupBy('value')->get();
+        return DB::table('omni_terms')->select('id', 'name', 'value')->where('value', 'like', "{$search}%")->groupBy('value')->get();
     }
 }
