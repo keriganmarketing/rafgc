@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Listing;
+use App\SearchFilters;
 use Illuminate\Http\Request;
 use App\Transformers\ListingTransformer;
 
@@ -15,7 +16,7 @@ class ScopedSearch
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->filters = new SearchFilters($request);
+        $this->filters = new SearchFilters($this->request);
     }
 
     public function setScope($scopedMethod, $args = [])
@@ -35,12 +36,11 @@ class ScopedSearch
                         return $query->where('prop_type', $filters->propertyType);
                     })
                     ->when($filters->area, function ($query) use ($filters) {
-                        $f = $filters;
-                        return $query->where(function ($q) use ($f){
-                            return $q->where('area', $f->area)
-                                     ->orWhere('sub_area', $f->area)
-                                     ->orWhere('city', $f->area)
-                                     ->orWhere('subdivision', $f->area);
+                        return $query->where(function ($q) use ($filters){
+                            return $q->where('area', $filters->area)
+                                     ->orWhere('sub_area', $filters->area)
+                                     ->orWhere('city', $filters->area)
+                                     ->orWhere('subdivision', $filters->area);
                         });
                     })
                     ->orderBy($filters->sortBy, $filters->orderBy)

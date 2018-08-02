@@ -11,6 +11,6 @@ class OmniBarController extends Controller
     {
         $search = $request->search;
 
-        return OmniTerm::where('value', 'like', "'{$search}%'")->distinct()->get();
+        return OmniTerm::where('value', 'like', "{$search}%")->groupBy('value')->get();
     }
 }
