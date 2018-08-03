@@ -10,6 +10,17 @@ class ListingsSearchController extends Controller
 {
     public function index(Request $request)
     {
+        $excludedAreas = [
+            'Carrabelle',
+            'Apalachicola',
+            'Eastpoint',
+            'Other Counties',
+            'Jackson County',
+            'Calhoun County',
+            'Holmes County',
+            'Washington County',
+        ];
+
         $omni         = $request->omni ?? '';
         $status       = $request->status ?? '';
         $area         = $request->area ?? '';
@@ -41,52 +52,54 @@ class ListingsSearchController extends Controller
                     ->orWhereRaw("mls_acct LIKE '%{$omni}%'");
             });
         })
-            ->when($propertyType, function ($query) use ($propertyType) {
-                return $query->whereIn('prop_type', 'like', $propertyType);
-            })
-            ->when($status, function ($query) use ($status) {
-                return $query->whereIn('status', $status);
-            })
-            ->when($area, function ($query) use ($area) {
-                return $query->where('area', $area)->orWhere('sub_area', $area);
-            })
-            ->when($minPrice, function ($query) use ($minPrice) {
-                return $query->where('list_price', '>=', $minPrice);
-            })
-            ->when($maxPrice, function ($query) use ($maxPrice) {
-                return $query->where('list_price', '<=', $maxPrice);
-            })
-            ->when($beds, function ($query) use ($beds) {
-                return $query->where('bedrooms', '>=', $beds);
-            })
-            ->when($baths, function ($query) use ($baths) {
-                return $query->where('baths', '>=', $baths);
-            })
-            ->when($sqft, function ($query) use ($sqft) {
-                return $query->where('tot_heat_sqft', '>=', $sqft);
-            })
-            ->when($acreage, function ($query) use ($acreage) {
-                return $query->where('acreage', '>=', $acreage);
-            })
-            ->when($waterfront, function ($query) use ($waterfront) {
-                return $query->where('ftr_waterfront', '!=', null);
-            })
-            ->when($waterview, function ($query) use ($waterview) {
-                return $query->where('ftr_waterview', '!=', null);
-            })
-            ->when($forclosure, function ($query) use ($forclosure) {
-                return $query->where('ftr_ownership', 'like', '%Bankruptcy%')
-                             ->orWhere('ftr_ownership', 'like','%Foreclosure%')
-                             ->orWhere('ftr_ownership', 'like','%REO%');
-            })
-            ->orderBy($sortBy, $orderBy)
-            ->paginate(36);
+        ->when($propertyType, function ($query) use ($propertyType) {
+            return $query->whereIn('prop_type', 'like', $propertyType);
+        })
+        ->when($status, function ($query) use ($status) {
+            return $query->whereIn('status', $status);
+        })
+        ->when($area, function ($query) use ($area) {
+            return $query->where('area', 'like', $area)->orWhere('sub_area', 'like', $area);
+        })
+        ->when($minPrice, function ($query) use ($minPrice) {
+            return $query->where('list_price', '>=', $minPrice);
+        })
+        ->when($maxPrice, function ($query) use ($maxPrice) {
+            return $query->where('list_price', '<=', $maxPrice);
+        })
+        ->when($beds, function ($query) use ($beds) {
+            return $query->where('bedrooms', '>=', $beds);
+        })
+        ->when($baths, function ($query) use ($baths) {
+            return $query->where('baths', '>=', $baths);
+        })
+        ->when($sqft, function ($query) use ($sqft) {
+            return $query->where('tot_heat_sqft', '>=', $sqft);
+        })
+        ->when($acreage, function ($query) use ($acreage) {
+            return $query->where('acreage', '>=', $acreage);
+        })
+        ->when($waterfront, function ($query) use ($waterfront) {
+            return $query->where('ftr_waterfront', '!=', null);
+        })
+        ->when($waterview, function ($query) use ($waterview) {
+            return $query->where('ftr_waterview', '!=', null);
+        })
+        ->when($forclosure, function ($query) use ($forclosure) {
+            return $query->where('ftr_ownership', 'like', '%Bankruptcy%')
+                            ->orWhere('ftr_ownership', 'like','%Foreclosure%')
+                            ->orWhere('ftr_ownership', 'like','%REO%');
+        })
+        ->orderBy($sortBy, $orderBy)
+        ->paginate(36);
+        // ->toSql();
+        // dd($listings);
 
         // ProcessListingImpression::dispatch($listings);
 
         // returns paginated links (with GET variables intact!)
         $listings->appends($request->all())->links();
 
-        return fractal($listings, new ListingTransformer)->toJson();
+        return fractal($listings->whereNotIn('area', $excludedAreas), new ListingTransformer)->toJson();
     }
 }

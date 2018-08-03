@@ -29,6 +29,16 @@ class ScopedSearch
 
     public function get()
     {
+        $excludedAreas = [
+            'Carrabelle',
+            'Apalachicola',
+            'Eastpoint',
+            'Other Counties',
+            'Jackson County',
+            'Calhoun County',
+            'Holmes County',
+            'Washington County',
+        ];
         $listing = new Listing();
         $filters = $this->filters;
         $listings = $listing->__call($this->customScope, $this->args)
@@ -46,6 +56,6 @@ class ScopedSearch
                     ->orderBy($filters->sortBy, $filters->orderBy)
                     ->paginate(36);
 
-        return fractal($listings, new ListingTransformer);
+        return fractal($listings->whereNotIn('area', $excludedAreas), new ListingTransformer);
     }
 }
