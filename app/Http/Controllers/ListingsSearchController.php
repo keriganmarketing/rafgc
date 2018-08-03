@@ -42,7 +42,7 @@ class ListingsSearchController extends Controller
             });
         })
             ->when($propertyType, function ($query) use ($propertyType) {
-                return $query->whereIn('prop_type', $propertyType);
+                return $query->whereIn('prop_type', 'like', $propertyType);
             })
             ->when($status, function ($query) use ($status) {
                 return $query->whereIn('status', $status);

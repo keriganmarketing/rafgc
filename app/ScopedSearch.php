@@ -33,7 +33,7 @@ class ScopedSearch
         $filters = $this->filters;
         $listings = $listing->__call($this->customScope, $this->args)
                     ->when($filters->propertyType, function ($query) use ($filters) {
-                        return $query->where('prop_type', $filters->propertyType);
+                        return $query->where('prop_type', 'like', $filters->propertyType);
                     })
                     ->when($filters->area, function ($query) use ($filters) {
                         return $query->where(function ($q) use ($filters){
