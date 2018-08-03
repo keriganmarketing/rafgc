@@ -97,6 +97,6 @@ class ListingsSearchController extends Controller
         // returns paginated links (with GET variables intact!)
         $listings->appends($request->all())->links();
 
-        return fractal($listings->whereNotIn('area', $excludedAreas), new ListingTransformer)->toJson();
+        return fractal($listings, new ListingTransformer)->toJson();
     }
 }

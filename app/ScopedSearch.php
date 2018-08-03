@@ -56,6 +56,6 @@ class ScopedSearch
                     ->orderBy($filters->sortBy, $filters->orderBy)
                     ->paginate(36);
 
-        return fractal($listings->whereNotIn('area', $excludedAreas), new ListingTransformer);
+        return fractal($listings, new ListingTransformer);
     }
 }
