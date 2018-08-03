@@ -37,9 +37,6 @@ class ListingsSearchController extends Controller
         $sortBy       = $request->sortBy ?? 'date_modified';
         $orderBy      = $request->orderBy ?? 'DESC';
 
-        if ($propertyType != '') {
-            $propertyType = explode('|', $propertyType);
-        }
         if ($status) {
             $status = explode('|', $status);
         }
@@ -53,7 +50,7 @@ class ListingsSearchController extends Controller
             });
         })
         ->when($propertyType, function ($query) use ($propertyType) {
-            return $query->whereIn('prop_type', 'like', $propertyType);
+            return $query->where('prop_type', 'like', $propertyType);
         })
         ->when($status, function ($query) use ($status) {
             return $query->whereIn('status', $status);
