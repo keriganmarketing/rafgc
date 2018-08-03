@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::prefix('/api/v1')->group(function () {
     Route::get('search', 'ListingsSearchController@index')->name('listings.search');
     Route::get('listings', 'FeaturedListingsController@index')->name('listings.featured');
+    Route::get('listing/{id}', 'ListingsController@show')->name('listing.show');
     Route::get('agent-listings/{agent}', 'AgentListingsController@index')->name('agent.listings');
     Route::get('omnibar', 'OmniBarController@index')->name('omnibar');
     Route::get('our-properties/{officeCode}', 'OurPropertiesController@index')->name('our-properties.index');
@@ -25,4 +26,5 @@ Route::prefix('/api/v1')->group(function () {
     Route::get('waterfront', 'WaterfrontPropertiesController@index')->name('waterfront.index');
     Route::get('forclosures', 'ForclosedPropertiesController@index')->name('forclosures.index');
     Route::get('contingent-pending', 'ContingentPropertiesController@index')->name('contingent-pending.index');
+    Route::get('new-listings', 'NewListingsController@index')->name('new-listings.index');
 });

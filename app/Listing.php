@@ -49,6 +49,14 @@ class Listing extends Model
         return $query->where('sold_date', '>=', $daysAgo);
     }
 
+    public function scopeNewListings($query, $days)
+    {
+        $days     = $days ?? 10;
+        $now      = Carbon::now();
+        $daysAgo  = $now->copy()->subDays($days);
+        return $query->where('list_date', '>=', $daysAgo);
+    }
+
     public function scopeBy($query, $officeCode)
     {
         return $query->where('lo_code', $officeCode)
