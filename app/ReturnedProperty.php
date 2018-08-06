@@ -88,7 +88,7 @@ class ReturnedProperty
     {
         $this->normalizeColumns();
 
-        return Listing::create($this->columns);
+        return Listing::updateOrCreate(['mls_acct' => $this->columns['mls_acct']], $this->columns);
     }
 
     private function normalizeColumns()

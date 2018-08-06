@@ -27,7 +27,7 @@ class MapSearchTransformer extends TransformerAbstract
             'price'          => (int) $listing->list_price,
             'property_type'  => $listing->prop_type,
             'state'          => $listing->state,
-            'status'         => $listing->mls_acct,
+            'status'         => $listing->status,
             'street_name'    => $listing->street_name,
             'street_number'  => (int) $listing->street_num,
             'unit_number'    => (int) $listing->unit_num

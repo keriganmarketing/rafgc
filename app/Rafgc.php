@@ -86,7 +86,7 @@ class Rafgc
         });
     }
 
-    private function attachMediaObjects($listing, $objects)
+    protected function attachMediaObjects($listing, $objects)
     {
         foreach ($objects as $object) {
             $returnedObject = new ReturnedObject($object);
@@ -94,7 +94,7 @@ class Rafgc
         }
     }
 
-    private function fetchListings($query = 'DATE_MODIFIED=1970-01-01+')
+    protected function fetchListings($query = 'DATE_MODIFIED=1970-01-01+')
     {
         $offset = 0;
         $maxRowsReached = false;
