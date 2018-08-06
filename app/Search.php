@@ -102,9 +102,9 @@ class Search
         // ProcessListingImpression::dispatch($listings);
 
         // returns paginated links (with GET variables intact!)
-        // $listings->appends($this->request->all())->links();
+        $listings->appends($this->request->all())->links();
 
-        return fractal($listings->whereNotIn('area', self::EXCLUDED_AREAS), new ListingTransformer)->toJson();
+        return fractal($listings, new ListingTransformer)->toJson();
     }
 
     public function noPaginate()
