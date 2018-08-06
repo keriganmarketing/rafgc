@@ -14,7 +14,7 @@ class AddFullAddressToListingsTable extends Migration
     public function up()
     {
         Schema::table('listings', function (Blueprint $table) {
-            $table->string('full_address')->nullable();
+            $table->string('full_address')->nullable()->index();
         });
     }
 

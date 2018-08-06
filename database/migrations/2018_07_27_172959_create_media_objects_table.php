@@ -15,7 +15,7 @@ class CreateMediaObjectsTable extends Migration
     {
         Schema::create('media_objects', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('listing_id');
+            $table->integer('listing_id')->index();
             $table->dateTime('date_modified')->nullable();
             $table->string('file_name')->nullable();
             $table->integer('media_id')->nullable();
@@ -24,7 +24,7 @@ class CreateMediaObjectsTable extends Migration
             $table->string('media_type')->nullable();
             $table->string('mls_acct')->nullable();
             $table->string('url')->nullable();
-            $table->boolean('is_preferred')->default(0);
+            $table->boolean('is_preferred')->default(0)->index();
             $table->timestamps();
         });
     }

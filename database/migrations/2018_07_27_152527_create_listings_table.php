@@ -51,7 +51,7 @@ class CreateListingsTable extends Migration
             $table->string('legal_lot')->nullable();
             $table->string('legal_unit')->nullable();
             $table->date('list_date')->nullable();
-            $table->integer('list_price')->nullable();
+            $table->integer('list_price')->nullable()->index();
             $table->string('lot_dimensions')->nullable();
             $table->string('lo_code')->nullable();
             $table->string('mls_acct')->nullable()->index();
