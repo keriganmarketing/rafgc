@@ -37,17 +37,10 @@ class Update implements ShouldQueue
     {
         $updater = new Updater;
 
-        $updater->connect()->full();
-    }
-
-    /**
-     * The job failed to process.
-     *
-     * @param  Exception  $exception
-     * @return void
-     */
-    public function failed(Exception $exception)
-    {
-        \Slack::send('This worked');
+        try {
+            $updater->connect()->full();
+        } catch (\Exception $e) {
+            \Slack::send($e->getMessage());
+        }
     }
 }
