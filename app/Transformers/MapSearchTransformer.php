@@ -2,10 +2,12 @@
 
 namespace App\Transformers;
 
+use App\PropTypeTranslator;
 use League\Fractal\TransformerAbstract;
 
 class MapSearchTransformer extends TransformerAbstract
 {
+
     /**
      * A Fractal transformer.
      *
@@ -13,12 +15,15 @@ class MapSearchTransformer extends TransformerAbstract
      */
     public function transform($listing)
     {
+        $translator = new PropTypeTranslator($listing->prop_type);
+        $class = $translator->translate();
         return [
             'id'             => $listing->id,
             'acreage'        => $listing->acreage,
             'baths'          => (int) $listing->baths,
             'bedrooms'       => (int) $listing->bedrooms,
             'city'           => $listing->city,
+            'class_name'     => $class,
             'lat'            => $listing->lat,
             'long'           => $listing->long,
             'lot_dimensions' => $listing->lot_dimensions,
