@@ -16,7 +16,6 @@ class Updater extends Rafgc
 
     public function full()
     {
-        throw new \Exception('This is a test for the RAFGC Failure. The error message would be displayed here.');
         foreach (self::CLASSES as $class) {
             $this->class = $class;
             $this->update();
