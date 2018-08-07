@@ -200,6 +200,8 @@ class Search
                             ->orWhere('listings.ftr_ownership', 'like','%Foreclosure%')
                             ->orWhere('listings.ftr_ownership', 'like','%REO%');
             })
+            ->where('sold_date', '>=', '2018-02-07')
+            ->orWhere('sold_date', null)
             ->get();
 
         // ProcessListingImpression::dispatch($listings);
