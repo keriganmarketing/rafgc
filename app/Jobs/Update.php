@@ -8,6 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Updater;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\FailedUpdate;
 
 class Update implements ShouldQueue
 {
@@ -33,5 +35,17 @@ class Update implements ShouldQueue
         $updater = new Updater;
 
         $updater->connect()->full();
+    }
+
+    /**
+     * The job failed to process.
+     *
+     * @param  Exception  $exception
+     * @return void
+     */
+    public function failed(Exception $exception)
+    {
+        Notification::route('slack', 'https://hooks.slack.com/services/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')
+                      ->notify(new FailedUpdate(json_encode($exception->getMessage())));
     }
 }

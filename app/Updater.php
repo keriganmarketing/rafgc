@@ -16,6 +16,7 @@ class Updater extends Rafgc
 
     public function full()
     {
+        throw new \Exception('Here is a failure');
         foreach (self::CLASSES as $class) {
             $this->class = $class;
             $this->update();
