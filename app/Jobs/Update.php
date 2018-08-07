@@ -46,6 +46,6 @@ class Update implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
-        \Slack::send($exception->getMessage())
+        \Slack::send($exception->getMessage());
     }
 }
