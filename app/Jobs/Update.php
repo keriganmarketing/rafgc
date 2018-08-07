@@ -48,6 +48,6 @@ class Update implements ShouldQueue
     {
         $admins = new User();
 
-        $admins->notify(new FailedUpdate(json_encode($exception->getMessage())));
+        $admins->notify(new FailedUpdate(json_encode($exception->getMessage())))->toSlack();
     }
 }
