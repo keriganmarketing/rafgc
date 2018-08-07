@@ -7,7 +7,6 @@ use League\Fractal\TransformerAbstract;
 
 class MapSearchTransformer extends TransformerAbstract
 {
-
     /**
      * A Fractal transformer.
      *
