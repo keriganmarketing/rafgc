@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use App\Updater;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FailedUpdate;
+use App\User;
 
 class Update implements ShouldQueue
 {
@@ -45,7 +46,8 @@ class Update implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
-        Notification::route('slack', 'https://hooks.slack.com/services/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')
-                      ->notify(new FailedUpdate(json_encode($exception->getMessage())));
+        $admins = new User();
+
+        $admins->notify(new FailedUpdate(json_encode($exception->getMessage())));
     }
 }
