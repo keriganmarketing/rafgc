@@ -11,10 +11,11 @@ use App\Updater;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FailedUpdate;
 use App\User;
+use Illuminate\Notifications\Notifiable;
 
 class Update implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, Notifiable,InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
