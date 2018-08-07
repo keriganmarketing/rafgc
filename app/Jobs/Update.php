@@ -46,8 +46,6 @@ class Update implements ShouldQueue
      */
     public function failed(Exception $exception)
     {
-        $admins = new User();
-
-        $admins->notify(new FailedUpdate(json_encode($exception->getMessage())))->toSlack();
+        \Slack::send($exception->getMessage());
     }
 }
