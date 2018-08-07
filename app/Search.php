@@ -6,6 +6,7 @@ use App\Listing;
 use Illuminate\Http\Request;
 use App\Transformers\ListingTransformer;
 use App\Transformers\MapSearchTransformer;
+use Carbon\Carbon;
 
 
 class Search
@@ -109,6 +110,7 @@ class Search
 
     public function noPaginate()
     {
+        $sixMonthsAgo = Carbon::now()->copy()->subDays(180)->format('Y-m-d');
         $omni         = $this->request->omni ?? '';
         $status       = $this->request->status ?? '';
         $area         = $this->request->area ?? '';
@@ -200,7 +202,7 @@ class Search
                             ->orWhere('listings.ftr_ownership', 'like','%Foreclosure%')
                             ->orWhere('listings.ftr_ownership', 'like','%REO%');
             })
-            ->where('sold_date', '>=', '2018-02-07')
+            ->where('sold_date', '>=', $sixMonthsAgo)
             ->orWhere('sold_date', null)
             ->get();
 
