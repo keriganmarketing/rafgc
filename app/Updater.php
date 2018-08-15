@@ -3,7 +3,6 @@ namespace App;
 
 use Carbon\Carbon;
 
-
 class Updater extends Rafgc
 {
     protected $lastModified;
@@ -23,13 +22,13 @@ class Updater extends Rafgc
     }
     private function update()
     {
-        $date = $this->lastModified[0];
-        $time = $this->lastModified[1];
+        $date = $this->lastModified[0] !== '' ? $this->lastModified[0] : '1970-01-01';
+        $time = isset($this->lastModified[1]) ? "T{$this->lastModified}+" :  null;
         $offset = 0;
         $maxRowsReached = false;
 
         while (!$maxRowsReached) {
-            $results = $this->rets->Search('Property', $this->class, "DATE_MODIFIED={$date}T{$time}+", self::QUERY_OPTIONS);
+            $results = $this->rets->Search('Property', $this->class, "DATE_MODIFIED={$date}{$time}+", self::QUERY_OPTIONS);
 
             echo '---------------------------------------------------------' . PHP_EOL;
             echo 'Class: ' . $this->class . PHP_EOL;
@@ -49,7 +48,6 @@ class Updater extends Rafgc
             echo 'Offset after this batch: ' . $offset . PHP_EOL;
 
             if ($offset >= $results->getTotalResultsCount()) {
-
                 echo 'Final Offset: ' . $offset . PHP_EOL;
                 $maxRowsReached = true;
             }
@@ -59,7 +57,9 @@ class Updater extends Rafgc
     protected function fetchGeocodeFor($listing)
     {
         $geocode = Location::where('listing_id', $listing->id)->first();
-        if ($geocode) { $geocode->delete(); }
+        if ($geocode) {
+            $geocode->delete();
+        }
         $listingObject = Listing::find($listing->id);
         Location::forListing($listingObject);
     }
@@ -73,6 +73,5 @@ class Updater extends Rafgc
         $objects = $this->rets->Search('Media', 'GFX', 'MLS_ACCT='. $listing->mls_acct, self::QUERY_OPTIONS);
         echo 'Adding / Updating ' . count($objects) . ' media objects to listing #' . ($listing->mls_acct) . PHP_EOL;
         $this->attachMediaObjects($listing, $objects);
-
     }
 }
