@@ -23,7 +23,7 @@ class Updater extends Rafgc
     private function update()
     {
         $date = $this->lastModified[0] !== '' ? $this->lastModified[0] : '1970-01-01';
-        $time = isset($this->lastModified[1]) ? "T{$this->lastModified}+" :  null;
+        $time = isset($this->lastModified[1]) ? "T{$this->lastModified[1]}+" :  null;
         $offset = 0;
         $maxRowsReached = false;
 
