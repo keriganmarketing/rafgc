@@ -66,7 +66,10 @@ class Search
             return $query->whereIn('status', $status);
         })
         ->when($area, function ($query) use ($area) {
-            return $query->where('area', 'like', $area)->orWhere('sub_area', 'like', $area);
+            $query->where(function ($query) use ($area) {
+                $query->where('area', 'like', $area)->orWhere('sub_area', 'like', $area);
+            });
+            /* return $query->where('area', 'like', $area)->orWhere('sub_area', 'like', $area); */
         })
         ->when($minPrice, function ($query) use ($minPrice) {
             return $query->where('list_price', '>=', $minPrice);
