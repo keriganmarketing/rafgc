@@ -15,14 +15,16 @@ class ProcessImpression implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $listings;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Listing $listing)
+    public function __construct($listings)
     {
-        $this->listing = $listing;
+        $this->listings = $listings;
     }
 
     /**
@@ -34,14 +36,17 @@ class ProcessImpression implements ShouldQueue
     {
         $today = Carbon::now()->copy()->toDateString();
 
-        if ($impression = Impression::where('listing_id', $this->listing->id)->where('served_on', $today)->first()) {
-            $impression->increment('counter');
-        } else {
-            Impression::create([
-                'listing_id' => $this->listing->id,
-                'served_on'  => $today,
-                'counter' => 1
-            ]);
+        foreach ($this->listings as $listing) {
+            $impressionsForToday = Impression::where('listing_id', $listing->id)->where('served_on', $today)->first();
+            if ($impressionsForToday) {
+                $impressionsForToday->increment('counter');
+            } else {
+                Impression::create([
+                    'listing_id' => $listing->id,
+                    'served_on'  => $today,
+                    'counter' => 1
+                ]);
+            }
         }
     }
 }

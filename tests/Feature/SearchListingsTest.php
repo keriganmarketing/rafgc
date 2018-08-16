@@ -16,7 +16,11 @@ class SearchListingsTest extends TestCase
     {
         $listing = factory(Listing::class)->create();
         // search for the listings address
-        $this->searchFor(['omni', $listing->full_address]);
+        $response = $this->searchFor(['omni', $listing->full_address]);
+
+        $response->assertJsonFragment([
+            'full_address' => $listing->full_address
+        ]);
     }
 
     public function searchFor($column)
@@ -24,9 +28,7 @@ class SearchListingsTest extends TestCase
         $key = $column[0];
         $value = $column[1];
 
-        $listings =
         $listings = $this->get("/api/v1/search?{$column[0]}={$column[1]}");
-        dd($listings);
 
         return $listings;
     }

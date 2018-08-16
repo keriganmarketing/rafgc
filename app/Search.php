@@ -3,10 +3,11 @@ namespace App;
 
 use DB;
 use App\Listing;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessImpression;
 use App\Transformers\ListingTransformer;
 use App\Transformers\MapSearchTransformer;
-use Carbon\Carbon;
 
 class Search
 {
@@ -103,7 +104,7 @@ class Search
         ->orderBy($sortBy, $orderBy)
         ->paginate(36);
 
-        // ProcessListingImpression::dispatch($listings);
+        ProcessImpression::dispatch($listings);
 
         // returns paginated links (with GET variables intact!)
         $listings->appends($this->request->all())->links();
@@ -217,7 +218,8 @@ class Search
             })
             ->get();
 
-        // ProcessListingImpression::dispatch($listings);
+        ProcessImpression::dispatch($listings);
+
 
         return fractal($listings, new MapSearchTransformer)->toJson();
     }

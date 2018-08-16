@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Location;
 use League\Fractal\TransformerAbstract;
 use App\Listing;
 
@@ -37,6 +38,7 @@ class ListingTransformer extends TransformerAbstract
             'energy'              => $listing->ftr_energy,
             'exterior'            => $listing->ftr_exterior,
             'forklift'            => $listing->ftr_forklift,
+            'full_address'        => $listing->full_address,
             'hoa_included'        => $listing->ftr_hoaincl,
             'interior'            => $listing->ftr_interior,
             'lot_access'          => $listing->ftr_lotaccess,
@@ -96,7 +98,7 @@ class ListingTransformer extends TransformerAbstract
 
     public function includeMediaObjects(Listing $listing)
     {
-        $mediaObjects = $listing->mediaObjects->sortBy(function ($mediaObject){
+        $mediaObjects = $listing->mediaObjects->sortBy(function ($mediaObject) {
             return $mediaObject->media_order;
         }) ?? [];
 
@@ -105,7 +107,7 @@ class ListingTransformer extends TransformerAbstract
 
     public function includeLocation(Listing $listing)
     {
-        $location = $listing->location ?? [];
+        $location = $listing->location ?? new Location();
 
         return $this->item($location, new LocationTransformer);
     }

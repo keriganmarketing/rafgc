@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Jobs\ProcessImpression;
 use App\Listing;
 use App\SearchFilters;
 use Illuminate\Http\Request;
@@ -55,6 +56,8 @@ class ScopedSearch
                     })
                     ->orderBy($filters->sortBy, $filters->orderBy)
                     ->paginate(36);
+
+        ProcessImpression::dispatch($listings);
 
         return fractal($listings, new ListingTransformer);
     }

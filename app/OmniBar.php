@@ -3,7 +3,6 @@ namespace App;
 
 use Illuminate\Support\Facades\DB;
 
-
 class OmniBar
 {
     public $columns;

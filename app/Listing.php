@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Jobs\ProcessImpression;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
@@ -24,21 +25,20 @@ class Listing extends Model
 
     public static function featuredList($mlsNumbers)
     {
-        return fractal(
-            Listing::whereIn('mls_acct', $mlsNumbers)->get(),
-            new ListingTransformer
-        )->toJson();
+        $listings = Listing::whereIn('mls_acct', $mlsNumbers)->get();
+
+        ProcessImpression::dispatch($listings);
+
+        return fractal($listings, new ListingTransformer)->toJson();
     }
 
     public static function forAgent($agentCode)
     {
-        return fractal(
-            Listing::where('la_code', $agentCode)
-                ->orWhere('co_la_code', $agentCode)
-                ->orWhere('sa_code', $agentCode)
-                ->get(),
-            new ListingTransformer
-        );
+        $listings = Listing::where('la_code', $agentCode)->orWhere('co_la_code', $agentCode)->orWhere('sa_code', $agentCode)->get();
+
+        ProcessImpression::dispatch($listings);
+
+        return fractal($listings, new ListingTransformer);
     }
 
     public function scopeRecentlySold($query, $days)
