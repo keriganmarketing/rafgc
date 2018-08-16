@@ -46,7 +46,7 @@ class ScopedSearch
                         return $query->where('prop_type', 'like', $filters->propertyType);
                     })
                     ->when($filters->area, function ($query) use ($filters) {
-                        return $query->where(function ($q) use ($filters){
+                        return $query->where(function ($q) use ($filters) {
                             return $q->where('area', $filters->area)
                                      ->orWhere('sub_area', $filters->area)
                                      ->orWhere('city', $filters->area)

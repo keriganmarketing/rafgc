@@ -64,6 +64,16 @@ class Listing extends Model
                      ->orWhere('so_code', $officeCode);
     }
 
+    public function scopeRecentlySoldBy($query, $officeCode)
+    {
+        $oneYearAgo = Carbon::now()->copy()->subYearNoOverflow();
+        return $query->where('lo_code', $officeCode)
+                     /* ->orWhere('co_lo_code', $officeCode) */
+                     /* ->orWhere('so_code', $officeCode) */
+                     ->where('sold_date', '>=', $oneYearAgo)
+                     ->whereNotNull('sold_date');
+    }
+
     public function scopeWaterFront($query)
     {
         return $query->where('ftr_waterfront', '!=', null);
@@ -72,8 +82,8 @@ class Listing extends Model
     public function scopeForclosures($query)
     {
         return $query->where('ftr_ownership', 'like', '%Bankruptcy%')
-                     ->orWhere('ftr_ownership', 'like','%Foreclosure%')
-                     ->orWhere('ftr_ownership', 'like','%REO%');
+                     ->orWhere('ftr_ownership', 'like', '%Foreclosure%')
+                     ->orWhere('ftr_ownership', 'like', '%REO%');
     }
 
     public function scopeContingentOrPending($query)

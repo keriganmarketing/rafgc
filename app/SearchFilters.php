@@ -3,7 +3,6 @@ namespace App;
 
 use Illuminate\Http\Request;
 
-
 class SearchFilters
 {
     public $sort;

@@ -8,7 +8,6 @@ use App\Transformers\ListingTransformer;
 use App\Transformers\MapSearchTransformer;
 use Carbon\Carbon;
 
-
 class Search
 {
     protected $request;
@@ -43,8 +42,9 @@ class Search
         $acreage      = $this->request->acreage ?? '';
         $waterfront   = $this->request->waterfront ?? '';
         $waterview    = $this->request->waterview ?? '';
-        $sortBy       = $this->request->sortBy ?? 'date_modified';
-        $orderBy      = $this->request->orderBy ?? 'DESC';
+        $sortArray    = $this->applySort();
+        $sortBy       = $sortArray[0];
+        $orderBy      = $sortArray[1];
 
         if ($status) {
             $status = explode('|', $status);
@@ -94,8 +94,8 @@ class Search
         })
         ->when($forclosure, function ($query) use ($forclosure) {
             return $query->where('ftr_ownership', 'like', '%Bankruptcy%')
-                                ->orWhere('ftr_ownership', 'like','%Foreclosure%')
-                                ->orWhere('ftr_ownership', 'like','%REO%');
+                                ->orWhere('ftr_ownership', 'like', '%Foreclosure%')
+                                ->orWhere('ftr_ownership', 'like', '%REO%');
         })
         ->orderBy($sortBy, $orderBy)
         ->paginate(36);
@@ -106,6 +106,13 @@ class Search
         $listings->appends($this->request->all())->links();
 
         return fractal($listings, new ListingTransformer)->toJson();
+    }
+
+    private function applySort()
+    {
+        $sorting = $this->request->sort ?? 'date_modified|desc';
+        $sortArray = explode('|', $sorting);
+        return $sortArray;
     }
 
     public function noPaginate()
@@ -199,10 +206,10 @@ class Search
             })
             ->when($forclosure, function ($query) use ($forclosure) {
                 return $query->where('listings.ftr_ownership', 'like', '%Bankruptcy%')
-                            ->orWhere('listings.ftr_ownership', 'like','%Foreclosure%')
-                            ->orWhere('listings.ftr_ownership', 'like','%REO%');
+                            ->orWhere('listings.ftr_ownership', 'like', '%Foreclosure%')
+                            ->orWhere('listings.ftr_ownership', 'like', '%REO%');
             })
-            ->where(function ($query) use ($sixMonthsAgo){
+            ->where(function ($query) use ($sixMonthsAgo) {
                 return $query->where('sold_date', '>=', $sixMonthsAgo)->orWhereNull('sold_date');
             })
             ->get();

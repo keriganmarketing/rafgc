@@ -23,6 +23,7 @@ Route::prefix('/api/v1')->group(function () {
     Route::get('agent-listings/{agent}', 'AgentListingsController@index')->name('agent.listings');
     Route::get('omnibar', 'OmniBarController@index')->name('omnibar');
     Route::get('our-properties/{officeCode}', 'OurPropertiesController@index')->name('our-properties.index');
+    Route::get('our-recently-sold/{officeCode}', 'OurSoldController@index')->name('our-properties.sold');
     Route::get('recently-sold', 'RecentlySoldController@index')->name('recently-sold.index');
     Route::get('waterfront', 'WaterfrontPropertiesController@index')->name('waterfront.index');
     Route::get('forclosures', 'ForclosedPropertiesController@index')->name('forclosures.index');
