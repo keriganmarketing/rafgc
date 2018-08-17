@@ -23,6 +23,16 @@ class Listing extends Model
         return $this->hasOne(Location::class);
     }
 
+    public function impressions()
+    {
+        return $this->hasMany(Impression::class);
+    }
+
+    public function clicks()
+    {
+        return $this->hasMany(Click::class);
+    }
+
     public static function featuredList($mlsNumbers)
     {
         $listings = Listing::whereIn('mls_acct', $mlsNumbers)->get();
