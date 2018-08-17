@@ -1,10 +1,10 @@
 <?php
 namespace App;
 
-use App\Jobs\ProcessImpression;
 use App\Listing;
 use App\SearchFilters;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessImpression;
 use App\Transformers\ListingTransformer;
 
 class ScopedSearch

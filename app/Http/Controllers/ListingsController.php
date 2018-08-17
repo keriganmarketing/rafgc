@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Listing;
+use App\Jobs\ProcessClick;
 use Illuminate\Http\Request;
 use App\Transformers\ListingTransformer;
 
@@ -37,10 +38,11 @@ class ListingsController extends Controller
      */
     public function show($id)
     {
-        return fractal(
-            Listing::where('mls_acct', $id)->first(),
-            new ListingTransformer
-        );
+        $listing = Listing::where('mls_acct', $id)->first();
+
+        ProcessClick::dispatch($listing);
+
+        return fractal($listing, new ListingTransformer);
     }
 
     /**
