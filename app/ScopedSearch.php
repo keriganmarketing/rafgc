@@ -31,8 +31,8 @@ class ScopedSearch
     public function get()
     {
         $excludes = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
-        $listing = new Listing();
-        $filters = $this->filters;
+        $listing  = new Listing();
+        $filters  = $this->filters;
         $listings = $listing->__call($this->customScope, $this->args)
                     ->when($filters->propertyType, function ($query) use ($filters) {
                         return $query->where('prop_type', 'like', $filters->propertyType);
