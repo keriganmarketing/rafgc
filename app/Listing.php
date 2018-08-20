@@ -100,4 +100,10 @@ class Listing extends Model
     {
         return $query->where('status', 'Contingent')->orWhere('status', 'Pending');
     }
+
+    public function scopeExcludeAreas($query, $areas)
+    {
+        return $query->whereNotIn('area', $areas);
+
+    }
 }

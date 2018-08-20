@@ -12,16 +12,6 @@ use App\Transformers\MapSearchTransformer;
 class Search
 {
     protected $request;
-    const EXCLUDED_AREAS = [
-        'Carrabelle',
-        'Apalachicola',
-        'Eastpoint',
-        'Other Counties',
-        'Jackson County',
-        'Calhoun County',
-        'Holmes County',
-        'Washington County',
-    ];
 
     public function __construct(Request $request)
     {
@@ -46,6 +36,7 @@ class Search
         $sortArray    = $this->applySort();
         $sortBy       = $sortArray[0];
         $orderBy      = $sortArray[1];
+        $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
 
         if ($status) {
             $status = explode('|', $status);
@@ -101,6 +92,7 @@ class Search
                                 ->orWhere('ftr_ownership', 'like', '%Foreclosure%')
                                 ->orWhere('ftr_ownership', 'like', '%REO%');
         })
+        ->excludeAreas($excludes)
         ->orderBy($sortBy, $orderBy)
         ->paginate(36);
 
@@ -137,6 +129,7 @@ class Search
         $waterview    = $this->request->waterview ?? '';
         $sortBy       = $this->request->sortBy ?? 'date_modified';
         $orderBy      = $this->request->orderBy ?? 'DESC';
+        $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
         if ($status) {
             $status = explode('|', $status);
         }
@@ -216,6 +209,7 @@ class Search
             ->where(function ($query) use ($sixMonthsAgo) {
                 return $query->where('sold_date', '>=', $sixMonthsAgo)->orWhereNull('sold_date');
             })
+            ->excludeAreas($excludes)
             ->get();
 
         ProcessImpression::dispatch($listings);

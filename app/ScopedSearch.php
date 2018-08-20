@@ -30,16 +30,7 @@ class ScopedSearch
 
     public function get()
     {
-        $excludedAreas = [
-            'Carrabelle',
-            'Apalachicola',
-            'Eastpoint',
-            'Other Counties',
-            'Jackson County',
-            'Calhoun County',
-            'Holmes County',
-            'Washington County',
-        ];
+        $excludes = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
         $listing = new Listing();
         $filters = $this->filters;
         $listings = $listing->__call($this->customScope, $this->args)
@@ -54,6 +45,7 @@ class ScopedSearch
                                      ->orWhere('subdivision', $filters->area);
                         });
                     })
+                    ->excludeAreas($excludes)
                     ->orderBy($filters->sortBy, $filters->orderBy)
                     ->paginate(36);
 
