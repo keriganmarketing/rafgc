@@ -12,6 +12,6 @@ class OmniBarController extends Controller
     {
         $search = $request->search;
 
-        return DB::table('omni_terms')->select('id', 'name', 'value')->where('value', 'like', "{$search}%")->groupBy('value')->get();
+        return DB::table('omni_terms')->select('id', 'name', 'value')->where('value', 'like', "%{$search}%")->groupBy('value')->get();
     }
 }
