@@ -209,7 +209,6 @@ class Search
             ->where(function ($query) use ($sixMonthsAgo) {
                 return $query->where('sold_date', '>=', $sixMonthsAgo)->orWhereNull('sold_date');
             })
-            ->excludeAreas($excludes)
             ->get();
 
         ProcessImpression::dispatch($listings);
