@@ -11,9 +11,12 @@ class OmniBar
     public function __construct()
     {
         $this->columns = [
-            'area', 'city',
-            'subdivision', 'sub_area',
-            'zip', 'mls_acct',
+            'area', 
+            'city',
+            'subdivision', 
+            'sub_area',
+            'zip', 
+            'mls_acct',
             'full_address'
         ];
     }
@@ -31,7 +34,7 @@ class OmniBar
 
         foreach ($this->columnData as $column) {
             if ($column->$name != null) {
-                OmniTerm::create([
+                OmniTerm::updateOrCreate([
                     'name' => $name,
                     'value' => strtolower($column->$name)
                 ]);
