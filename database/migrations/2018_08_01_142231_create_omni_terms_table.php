@@ -15,8 +15,8 @@ class CreateOmniTermsTable extends Migration
     {
         Schema::create('omni_terms', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('value');
+            $table->string('name')->index();
+            $table->string('value')->index();
             $table->timestamps();
         });
     }

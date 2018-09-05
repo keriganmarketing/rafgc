@@ -40,7 +40,6 @@ class Update implements ShouldQueue
         try {
             $updater->connect()->full();
             BuildFullAddresses::dispatch();
-            RebuildOmniTerms::dispatch();
         } catch (\Exception $e) {
             \Slack::send($e->getMessage());
         }

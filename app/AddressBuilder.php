@@ -8,7 +8,7 @@ class AddressBuilder
 {
     public static function populateEmpty()
     {
-        DB::table('listings')->orderBy('id', 'asc')->chunk(500, function ($listings) {
+        DB::table('listings')->where('full_address', null)->orderBy('id', 'asc')->chunk(500, function ($listings) {
             foreach ($listings as $listing) {
                 $streetNumber = $listing->street_num ?? '';
                 $streetName   = $listing->street_name ?? 'No Street Name Provided';
