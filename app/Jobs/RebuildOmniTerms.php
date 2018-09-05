@@ -2,21 +2,16 @@
 
 namespace App\Jobs;
 
+use App\OmniBar;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Updater;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\FailedUpdate;
-use App\User;
 
-class Update implements ShouldQueue
+class RebuildOmniTerms implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -35,14 +30,6 @@ class Update implements ShouldQueue
      */
     public function handle()
     {
-        $updater = new Updater;
-
-        try {
-            $updater->connect()->full();
-            BuildFullAddresses::dispatch();
-            RebuildOmniTerms::dispatch();
-        } catch (\Exception $e) {
-            \Slack::send($e->getMessage());
-        }
+        (new OmniBar)->buildTable();
     }
 }
