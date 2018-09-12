@@ -137,8 +137,31 @@ class Rafgc
 
         foreach ($results as $result) {
             $returned = new ReturnedProperty($result);
-            $returned->save();
+            $property = $returned->save();
+            $this->fetchPhotosFor($property);
+            $this->fetchGeocodeFor($property);
         }
+    }
+
+    protected function fetchGeocodeFor($listing)
+    {
+        $geocode = Location::where('listing_id', $listing->id)->first();
+        if ($geocode) {
+            $geocode->delete();
+        }
+        $listingObject = Listing::find($listing->id);
+        Location::forListing($listingObject);
+    }
+
+    protected function fetchPhotosFor($listing)
+    {
+        $photos = MediaObject::where('listing_id', $listing->id)->get();
+        foreach ($photos as $photo) {
+            $photo->delete();
+        }
+        $objects = $this->rets->Search('Media', 'GFX', 'MLS_ACCT='. $listing->mls_acct, self::QUERY_OPTIONS);
+        echo 'Adding / Updating ' . count($objects) . ' media objects to listing #' . ($listing->mls_acct) . PHP_EOL;
+        $this->attachMediaObjects($listing, $objects);
     }
 
 
