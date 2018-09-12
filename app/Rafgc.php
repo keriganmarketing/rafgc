@@ -124,6 +124,24 @@ class Rafgc
         }
     }
 
+    public function troubleshoot($class, $mlsNumber)
+    {
+        $results = $this->rets->Search('Property', $class, 'MLS_ACCT='. $mlsNumber, self::QUERY_OPTIONS);
+
+        dd(new ReturnedProperty($results));
+    }
+
+    public function forceUpdate($class, $mlsNumber)
+    {
+        $results = $this->rets->Search('Property', $class, 'MLS_ACCT='. $mlsNumber, self::QUERY_OPTIONS);
+
+        foreach ($results as $result) {
+            $returned = new ReturnedProperty($result);
+            $returned->save();
+        }
+    }
+
+
     public function __destruct()
     {
         $this->rets->Disconnect();
