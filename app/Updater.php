@@ -7,10 +7,10 @@ class Updater extends Rafgc
 {
     protected $lastModified;
 
-    public function __construct()
+    public function __construct($lastModified = null)
     {
         parent::__construct();
-        $this->lastModified = explode(' ', Listing::pluck('date_modified')->max());
+        $this->lastModified = $lastModified !== null ? explode(' ', $lastModified): ['1970-01-01'];
     }
 
     public function full()
@@ -52,26 +52,5 @@ class Updater extends Rafgc
                 $maxRowsReached = true;
             }
         }
-    }
-
-    protected function fetchGeocodeFor($listing)
-    {
-        $geocode = Location::where('listing_id', $listing->id)->first();
-        if ($geocode) {
-            $geocode->delete();
-        }
-        $listingObject = Listing::find($listing->id);
-        Location::forListing($listingObject);
-    }
-
-    protected function fetchPhotosFor($listing)
-    {
-        $photos = MediaObject::where('listing_id', $listing->id)->get();
-        foreach ($photos as $photo) {
-            $photo->delete();
-        }
-        $objects = $this->rets->Search('Media', 'GFX', 'MLS_ACCT='. $listing->mls_acct, self::QUERY_OPTIONS);
-        echo 'Adding / Updating ' . count($objects) . ' media objects to listing #' . ($listing->mls_acct) . PHP_EOL;
-        $this->attachMediaObjects($listing, $objects);
     }
 }

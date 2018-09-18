@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
+use App\User;
+use App\Listing;
+use App\Updater;
 use Illuminate\Bus\Queueable;
+use App\Notifications\FailedUpdate;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Updater;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\FailedUpdate;
-use App\User;
 
 class Update implements ShouldQueue
 {
@@ -35,7 +36,8 @@ class Update implements ShouldQueue
      */
     public function handle()
     {
-        $updater = new Updater;
+        $lastModified = Listing::pluck('date_modified')->max();
+        $updater = new Updater($lastModified);
 
         try {
             $updater->connect()->full();
