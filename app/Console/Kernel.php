@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\Update;
+use App\Jobs\CleanDB;
 use App\Jobs\RebuildOmniTerms;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
