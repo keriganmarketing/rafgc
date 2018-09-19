@@ -1,8 +1,8 @@
 <?php
 namespace App;
 
-use PHRETS\Configuration;
 use PHRETS\Session;
+use PHRETS\Configuration;
 use Illuminate\Support\Facades\DB;
 use Laravel\Tinker\Console\TinkerCommand;
 
@@ -34,11 +34,11 @@ class Rafgc
     {
         $config = new Configuration();
         $config->setLoginUrl(self::URL)
-            ->setUsername($this->username)
-            ->setPassword($this->password)
-            ->setRetsVersion('1.7.2')
-            ->setOption("compression_enabled", true)
-            ->setOption("offset_support", true);
+               ->setUsername($this->username)
+               ->setPassword($this->password)
+               ->setRetsVersion('1.7.2')
+               ->setOption("compression_enabled", true)
+               ->setOption("offset_support", true);
 
 
 
@@ -51,14 +51,54 @@ class Rafgc
 
     public function buildListings()
     {
-       foreach (self::CLASSES as $class) {
-           $this->class = $class;
-           $this->fetchListings();
-       }
+        foreach (self::CLASSES as $class) {
+            $this->class = $class;
+            $this->fetchListings();
+        }
 
-       $this->getGeocodes();
+        $this->getGeocodes();
 
-       return $this;
+        return $this;
+    }
+
+    public function getMLSList()
+    {
+        $query = 'DATE_MODIFIED=1970-01-01+';
+        $listingArray = [];
+
+        foreach (self::CLASSES as $class) {
+            $this->class = $class;
+            $results = $this->rets->Search('Property', $this->class, $query,  [
+                'QueryType'     => 'DMQL2',
+                'Count'         => 1, // count and records
+                'Format'        => 'COMPACT-DECODED',
+                'Limit'         => 99999,
+                'StandardNames' => 0, // give system names
+                'Select'        => 'MLS_ACCT'
+            ]);
+            foreach($results as $result) {
+                array_push($listingArray, $result['MLS_ACCT']);
+            }
+        }
+
+        return collect($listingArray);
+    }
+    public function cleanListings()
+    {
+        $counter           = 0;
+        $remoteMlsNumbers  = $this->getMLSList();
+        $localMlsNumbers   = Listing::pluck('mls_acct');
+        $expiredProperties = array_diff($localMlsNumbers->toArray(), $remoteMlsNumbers->toArray());
+
+        foreach ($expiredProperties as $mlsAcct) {
+            $listing = Listing::byMlsNumber($mlsAcct);
+            $listing->nuke();
+            $counter += 1;
+        }
+
+        return 'Removed '. $counter .' expired properties.';
+
+
     }
 
     public static function getGeocodes()

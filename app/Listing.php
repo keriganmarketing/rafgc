@@ -51,6 +51,36 @@ class Listing extends Model
         return fractal($listings, new ListingTransformer);
     }
 
+    public static function byMlsNumber($mlsNumber)
+    {
+        return Listing::where('mls_acct', $mlsNumber)->first();   
+    }
+
+    public function nuke()
+    {
+        $mediaObjects = MediaObject::where('listing_id', $this->id)->get();
+        foreach ($mediaObjects as $MediaObject) {
+            $MediaObject->delete();
+        }
+        $locations = Location::where('listing_id', $this->id)->get();
+        foreach ($locations as $location) {
+            $location->delete();
+        }
+
+        $clicks = Click::where('listing_id', $this->id)->get();
+        foreach ($clicks as $click) {
+            $click->delete();
+        }
+
+        $impressions = Impression::where('listing_id', $this->id)->get();
+        foreach ($impressions as $impression) {
+            $impression->delete();
+        }
+
+        $this->delete();
+    }
+    
+
     public function scopeRecentlySold($query, $days)
     {
         $days     = $days ?? 90;
