@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->job(new RebuildOmniTerms)->hourly();
         $schedule->job(new Update)->everyThirtyMinutes();
+        $schedule->job(new CleanDB)->everyThirtyMinutes();
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
 
