@@ -128,7 +128,7 @@ class Search
         $waterview    = $this->request->waterview ?? '';
         $sortBy       = $this->request->sortBy ?? 'date_modified';
         $orderBy      = $this->request->orderBy ?? 'DESC';
-        /* $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : []; */
+        $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
         if ($status) {
             $status = explode('|', $status);
         }
