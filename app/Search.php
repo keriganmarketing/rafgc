@@ -47,8 +47,7 @@ class Search
                 $query->whereRaw("city LIKE '%{$omni}%'")
                     ->orWhereRaw("zip LIKE '%{$omni}%'")
                     ->orWhereRaw("subdivision LIKE '%{$omni}%'")
-                    ->orWhereRaw("full_address LIKE '%{$omni}%'")
-                    ->orWhereRaw("mls_acct LIKE '%{$omni}%'");
+                    ->orWhereRaw("full_address LIKE '%{$omni}%'") ->orWhereRaw("mls_acct LIKE '%{$omni}%'");
             });
         })
         ->when($propertyType, function ($query) use ($propertyType) {
@@ -129,7 +128,7 @@ class Search
         $waterview    = $this->request->waterview ?? '';
         $sortBy       = $this->request->sortBy ?? 'date_modified';
         $orderBy      = $this->request->orderBy ?? 'DESC';
-        $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : [];
+        /* $excludes     = isset($this->request->excludes) ? explode('|', $this->request->excludes) : []; */
         if ($status) {
             $status = explode('|', $status);
         }
