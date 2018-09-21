@@ -211,10 +211,9 @@ class Search
             })
             ->get();
 
-        return fractal($listings, new MapSearchTransformer)->toJson();
-
+        dd($listings);
         ProcessImpression::dispatch($listings);
 
-
+        return fractal($listings, new MapSearchTransformer)->toJson();
     }
 }
