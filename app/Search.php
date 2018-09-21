@@ -149,24 +149,24 @@ class Search
                 'listings.acreage',
                 'listings.mls_acct',
                 'listings.status',
-                'media_objects.url',
-                'locations.lat',
-                'locations.long'
+                /* 'media_objects.url', */
+                /* 'locations.lat', */
+                /* 'locations.long' */
             )
-            ->join('media_objects', function ($join) {
-                $join->on('listings.id', '=', 'media_objects.listing_id')
-                     ->where('media_objects.is_preferred', 1);
-            })
-            ->join('locations', 'listings.id', '=', 'locations.listing_id')
-            ->when($omni, function ($query) use ($omni) {
-                $query->where(function ($query) use ($omni) {
-                    $query->whereRaw("listings.city LIKE '%{$omni}%'")
-                        ->orWhereRaw("listings.zip LIKE '%{$omni}%'")
-                        ->orWhereRaw("listings.subdivision LIKE '%{$omni}%'")
-                        ->orWhereRaw("listings.full_address LIKE '%{$omni}%'")
-                        ->orWhereRaw("listings.mls_acct LIKE '%{$omni}%'");
-                });
-            })
+            /* ->join('media_objects', function ($join) { */
+            /*     $join->on('listings.id', '=', 'media_objects.listing_id') */
+            /*          ->where('media_objects.is_preferred', 1); */
+            /* }) */
+            /* ->join('locations', 'listings.id', '=', 'locations.listing_id') */
+            /* ->when($omni, function ($query) use ($omni) { */
+            /*     $query->where(function ($query) use ($omni) { */
+            /*         $query->whereRaw("listings.city LIKE '%{$omni}%'") */
+            /*             ->orWhereRaw("listings.zip LIKE '%{$omni}%'") */
+            /*             ->orWhereRaw("listings.subdivision LIKE '%{$omni}%'") */
+            /*             ->orWhereRaw("listings.full_address LIKE '%{$omni}%'") */
+            /*             ->orWhereRaw("listings.mls_acct LIKE '%{$omni}%'"); */
+            /*     }); */
+            /* }) */
             ->when($propertyType, function ($query) use ($propertyType) {
                 return $query->where('listings.prop_type', 'like', $propertyType);
             })
