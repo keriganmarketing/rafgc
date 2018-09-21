@@ -148,7 +148,7 @@ class Search
                 'listings.lot_dimensions',
                 'listings.acreage',
                 'listings.mls_acct',
-                'listings.status'
+                'listings.status',
                 'media_objects.url',
                 'locations.lat',
                 'locations.long'
