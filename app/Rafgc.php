@@ -90,10 +90,12 @@ class Rafgc
         $localMlsNumbers   = Listing::pluck('mls_acct');
         $expiredProperties = array_diff($localMlsNumbers->toArray(), $remoteMlsNumbers->toArray());
 
-        foreach ($expiredProperties as $mlsAcct) {
-            $listing = Listing::byMlsNumber($mlsAcct);
-            $listing->nuke();
-            $counter += 1;
+        if (collect($remoteMlsNumbers)->count() > 0) {
+            foreach ($expiredProperties as $mlsAcct) {
+                $listing = Listing::byMlsNumber($mlsAcct);
+                $listing->nuke();
+                $counter += 1;
+            }
         }
 
         return 'Removed '. $counter .' expired properties.';

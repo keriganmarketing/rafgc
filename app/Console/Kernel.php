@@ -27,10 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new RebuildOmniTerms)->hourly();
-        $schedule->job(new Update)->everyThirtyMinutes();
-        $schedule->job(new CleanDB)->everyThirtyMinutes();
-        $schedule->command('horizon:snapshot')->everyFiveMinutes();
+        // $schedule->job(new RebuildOmniTerms)->hourly();
+        // $schedule->job(new Update)->everyThirtyMinutes();
+        // $schedule->job(new CleanDB)->everyThirtyMinutes();
+        // $schedule->command('horizon:snapshot')->everyFiveMinutes();
     }
 
     /**
